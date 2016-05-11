@@ -1,0 +1,16 @@
+{
+    "version": "1.0.0-*",
+    "compilationOptions": {
+        "emitEntryPoint": true
+    },
+    "dependencies": {
+        "NETStandard.Library": "1.0.0-rc2-23811",
+        "System.IO": "4.1.0-rc2-23811",
+        "System.IO.MemoryMappedFiles": "4.0.0-rc2-23811",
+        "NLog": "4.4.0-beta4",
+        "ImageProcessorCore": "1.0.0-alpha-783"
+    },
+    "frameworks": {
+        "dnxcore50": {}
+    }
+}
