@@ -8,12 +8,13 @@ using NLog;
 namespace C2eUtils.ImageFormats
 {   
     /// <summary>
-    /// Decoder for generating an image out of a gif encoded stream.
+    /// Decoder for generating an image out of a BLK encoded stream.
     /// </summary>
     public class BLKDecoder : IImageDecoder
     {
         public int HeaderSize => 10;
 
+        /// <inheritdoc/>
         public bool IsSupportedFileExtension(string extension)
         {
             if (extension == null)
@@ -28,18 +29,23 @@ namespace C2eUtils.ImageFormats
             return extension.Equals("blk", StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <inheritdoc/>
         public bool IsSupportedFileFormat(byte[] header)
         {
             // TODO comprobaciones
             return header.Length == 10;
         }
-
+        
+        /// <inheritdoc/>
         public void Decode(Image image, Stream stream)
         {
             new BLKDecoderCore().Decode(image, stream);
         }
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
     internal class BLKDecoderCore
     {
          private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -48,35 +54,45 @@ namespace C2eUtils.ImageFormats
          private BLKImageHeader[] imageheaders;
          private Image imagedestintion;
          private Stream originStream;
-         
+        
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="image"></param>
+         /// <param name="stream"></param>
          public void Decode(Image image, Stream stream) 
          {
-             imagedestintion = image;
-             originStream = stream;
-             
-              // leemos la cabecera del fichero 
-              GetHeaderBLK(originStream);
-              
-              
+            imagedestintion = image;
+            originStream = stream;
+            GetHeaderBLK(originStream);
+            logger.Trace("--------------");
          }
-         
-         private void GetHeaderBLK(Stream originStream){
-             // byte[] buffer = new byte[1*]; 
-             // originStream.Read(buffer, 0, buffer.Length); 
-             // var rgbFormat = BitConverter.ToUInt32(buffer,0);
-             // var sprites   = BitConverter.ToUInt16(buffer,4);
-             // var widthBlocks = BitConverter.ToUInt32(buffer,6);
-             // var heightBlocks   = BitConverter.ToUInt16(buffer,8);
-             // header = new BLKHeader(rgbFormat,sprites);  
-             // logger.Trace("file header RGB format {0} Sprites: {1}",rgbFormat,sprites);
-         }
-         
         
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="originStream"></param>
+         private void GetHeaderBLK(Stream originStream){
+            byte[] buffer = new byte[10]; 
+            originStream.Read(buffer, 0, buffer.Length); 
+            var rgbFormat = BitConverter.ToUInt32(buffer,0);
+            var widthBlocks = BitConverter.ToUInt16(buffer,4);
+            var heightBlocks   = BitConverter.ToUInt16(buffer,6);
+            var sprites   = BitConverter.ToUInt16(buffer,8);
+             // header = new BLKHeader(rgbFormat,sprites);  
+            logger.Trace("file header RGB format {0} FRAMES: {1} BLOCKS:{2}x{3}",
+                        rgbFormat,sprites,widthBlocks,heightBlocks);
+         }
          
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="imageheader"></param>
+         /// <param name="RGBFormat"></param>
          private void DecodeSprite(BLKImageHeader imageheader, UInt32 RGBFormat){
              byte[] frameEncoded = new byte[ imageheader.Width * imageheader.Height * 2];
-             originStream.Seek(imageheader.OffsetFirstImage, SeekOrigin.Begin);
-             originStream.Read(frameEncoded,0,frameEncoded.Length);
+       //      originStream.Seek(imageheader.OffsetFirstImage, SeekOrigin.Begin);
+       //      originStream.Read(frameEncoded,0,frameEncoded.Length);
              if(RGBFormat == 0){
               //   Decode555(frameEncoded, imageheader.Width, imageheader.Height);
              }
@@ -86,10 +102,24 @@ namespace C2eUtils.ImageFormats
                  
          }
          
+         
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="frameEncoded"></param>
+         /// <param name="width"></param>
+         /// <param name="height"></param>
          private void Decode555(byte[] frameEncoded,UInt16 width , UInt16 height){
                  logger.Trace("Decode 555");
          }
          
+         
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="frameEncoded"></param>
+         /// <param name="width"></param>
+         /// <param name="height"></param>
          private void Decode565(byte[] frameEncoded,UInt16 width , UInt16 height){
                  logger.Trace("Decode 565 {0}x{1}",width,height);
                  float[] pixels = new float[width * height * 4];

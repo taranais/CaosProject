@@ -8,12 +8,13 @@ using NLog;
 namespace C2eUtils.ImageFormats
 {   
     /// <summary>
-    /// Decoder for generating an image out of a gif encoded stream.
+    /// Decoder for generating an image out of a s16 encoded stream.
     /// </summary>
     public class S16Decoder : IImageDecoder
     {
         public int HeaderSize => 6;
 
+        /// <inheritdoc/>
         public bool IsSupportedFileExtension(string extension)
         {
             if (extension == null)
@@ -28,12 +29,14 @@ namespace C2eUtils.ImageFormats
             return extension.Equals("s16", StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <inheritdoc/>
         public bool IsSupportedFileFormat(byte[] header)
         {
             // TODO comprobaciones
             return header.Length == 6;
         }
 
+        /// <inheritdoc/>
         public void Decode(Image image, Stream stream)
         {
             new s16DecoderCore().Decode(image, stream);
@@ -49,6 +52,11 @@ namespace C2eUtils.ImageFormats
          private Image imagedestintion;
          private Stream originStream;
          
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="image"></param>
+         /// <param name="stream"></param>
          public void Decode(Image image, Stream stream) 
          {
              imagedestintion = image;
@@ -63,6 +71,10 @@ namespace C2eUtils.ImageFormats
               }
          }
          
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="originStream"></param>
          private void GetHeaderS16(Stream originStream){
               byte[] buffer = new byte[6]; 
               originStream.Read(buffer, 0, buffer.Length); 
@@ -72,6 +84,10 @@ namespace C2eUtils.ImageFormats
               logger.Trace("file header RGB format {0} Sprites: {1}",rgbFormat,sprites);
          }
          
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="originStream"></param>
          private void GetImageHeaderS16(Stream originStream){
              imageheaders = new s16ImageHeader[header.Sprites];
               //leemos cada una de las cabeceras de imagen
@@ -88,6 +104,11 @@ namespace C2eUtils.ImageFormats
               }
          }
          
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="imageheader"></param>
+         /// <param name="RGBFormat"></param>
          private void DecodeSprite(s16ImageHeader imageheader, UInt32 RGBFormat){
              byte[] frameEncoded = new byte[ imageheader.Width * imageheader.Height * 2];
              originStream.Seek(imageheader.OffsetFirstImage, SeekOrigin.Begin);
@@ -101,10 +122,22 @@ namespace C2eUtils.ImageFormats
                  
          }
          
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="frameEncoded"></param>
+         /// <param name="width"></param>
+         /// <param name="height"></param>
          private void Decode555(byte[] frameEncoded,UInt16 width , UInt16 height){
                  logger.Trace("Decode 555");
          }
          
+         /// <summary>
+         /// 
+         /// </summary>
+         /// <param name="frameEncoded"></param>
+         /// <param name="width"></param>
+         /// <param name="height"></param>
          private void Decode565(byte[] frameEncoded,UInt16 width , UInt16 height){
                  logger.Trace("Decode 565 {0}x{1}",width,height);
                  float[] pixels = new float[width * height * 4];

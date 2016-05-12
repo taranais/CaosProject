@@ -1,1 +1,1 @@
-CoreC2E
+# CoreC2E for CoreNet

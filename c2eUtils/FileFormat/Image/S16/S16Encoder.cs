@@ -17,6 +17,7 @@ namespace C2eUtils.ImageFormats
 
         public string MimeType => "image/s16";
 
+        /// <inheritdoc/>
         public bool IsSupportedFileExtension(string extension)
         {
             if (extension == null)
@@ -31,6 +32,7 @@ namespace C2eUtils.ImageFormats
             return extension.Equals(this.Extension, StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <inheritdoc/>
         public void Encode(ImageBase image, Stream stream)
         {
          //   GifEncoderCore encoder = new GifEncoderCore

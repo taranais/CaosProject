@@ -27,6 +27,7 @@ namespace C2eUtils
         //CaosInjector caosCommand = new CaosInjector(new SocketsInjector("Docking Station"));
      //   caosCommand.Init();
         
+        
         String textToExecute =
                           "enum 4 0 0 " +                    // iterate creatures
                             "doif targ <> null " +           // check not null ??
@@ -40,6 +41,7 @@ namespace C2eUtils
    
    string file=@"C:\Users\taran\Documents\Creatures\Docking Station\Images\000e.c16";
    file = @"C:\Users\taran\Documents\Creatures\Docking Station\My Worlds\test\Images\001-star-3ggu4-qbmf6-k3r8v-nphx4-3.s16";
+  // file = @"C:\Program Files\GOG.com\Creatures Exodus\Docking Station\Backgrounds\NornMeso039.blk";
   //     x16Loader loader = new x16Loader(file);
         
         for (int i=0; i<1000 ; i++) {
@@ -56,7 +58,7 @@ namespace C2eUtils
             {
                IImageFormat format = new JpegFormat();
                IImageFormat[] formats = new IImageFormat[1];
-               formats[0]= new S16Format();
+               formats[0]= new BLKFormat();
                 using (Image image = new Image(stream, formats))
                 {
                   //Image frame = new Image( image.Frames[2] );

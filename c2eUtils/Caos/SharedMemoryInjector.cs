@@ -6,10 +6,12 @@ using System.Threading;
 
 namespace C2eUtils.Caos
 {   
-    ///    windows version
-    ///     TODO
+    /// <summary>
+    /// 
+    /// </summary>
     public class SharedMemoryInjector : ACaosInjector
     {
+        
         private Mutex mutex;
         private MemoryMappedFile memfile;
         private MemoryMappedViewAccessor memViewAccessor;
@@ -18,6 +20,10 @@ namespace C2eUtils.Caos
         
         public SharedMemoryInjector(string game) : base(game) { }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override bool Init(){    
             bool exito= true;
             try
@@ -40,6 +46,11 @@ namespace C2eUtils.Caos
             }
             return exito;
         }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override bool Stop(){
             bool exito= true;
             try{
@@ -62,6 +73,11 @@ namespace C2eUtils.Caos
             return exito;
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="CaosAsString"></param>
+        /// <param name="Action"></param>
         public override void SendCaos(string CaosAsString, string Action){
                 Log.Trace("Executing Caos for {0}",Game);
                 CaosResult caosResult = null;
