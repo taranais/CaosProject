@@ -54,7 +54,8 @@ namespace C2eUtils.ImageFormats
          private BLKImageHeader[] imageheaders;
          private Image imagedestintion;
          private Stream originStream;
-        
+         private float[] imageTemp;
+         
          /// <summary>
          /// 
          /// </summary>
@@ -65,7 +66,20 @@ namespace C2eUtils.ImageFormats
             imagedestintion = image;
             originStream = stream;
             GetHeaderBLK(originStream);
-            logger.Trace("--------------");
+            GetImageHeaderBLK(originStream);
+            imageTemp = new float[(header.BlocksWidth *128 * header.BlocksHeight *128)  * 4];
+            logger.Trace("Decode Image :{0}x{1} Length {2}", header.BlocksWidth *128 , header.BlocksHeight * 128 ,imageTemp.Length ); 
+            for (UInt16 height = 0; height < header.BlocksHeight; height++)
+            {
+                for (UInt16 width = 0; width < header.BlocksWidth; width++)
+                {
+                  //int pos = (height*header.BlocksWidth) + width; 
+                  int pos = (width *header.BlocksHeight) + height;
+                  logger.Trace("Decode {0}/{1} => {2}:{3}",pos ,header.Sprites -1 ,height,width);  
+                  DecodeSprite(imageheaders[pos],header.RGBFormat,height,width);   
+                }
+            }
+            imagedestintion.SetPixels(header.BlocksWidth * 128 , header.BlocksHeight * 128, imageTemp);
          }
         
          /// <summary>
@@ -79,7 +93,7 @@ namespace C2eUtils.ImageFormats
             var widthBlocks = BitConverter.ToUInt16(buffer,4);
             var heightBlocks   = BitConverter.ToUInt16(buffer,6);
             var sprites   = BitConverter.ToUInt16(buffer,8);
-             // header = new BLKHeader(rgbFormat,sprites);  
+            header = new BLKHeader(rgbFormat,sprites, widthBlocks, heightBlocks);  
             logger.Trace("file header RGB format {0} FRAMES: {1} BLOCKS:{2}x{3}",
                         rgbFormat,sprites,widthBlocks,heightBlocks);
          }
@@ -87,17 +101,38 @@ namespace C2eUtils.ImageFormats
          /// <summary>
          /// 
          /// </summary>
+         /// <param name="originStream"></param>
+         private void GetImageHeaderBLK(Stream originStream){
+             imageheaders = new BLKImageHeader[header.Sprites];
+              //leemos cada una de las cabeceras de imagen
+              for (UInt16 i = 0; i < header.Sprites; i++)
+              {
+                int offset = 7 + (i * 8);
+                byte[] imageHeader = new byte[8];
+                originStream.Read(imageHeader,0,8);
+                var OffsetFirstImage = BitConverter.ToUInt32(imageHeader,0);
+                var Width   = BitConverter.ToUInt16(imageHeader,4);          
+                var Height   = BitConverter.ToUInt16(imageHeader,6);
+               // logger.Trace("image header offset first image {0} Size {1}x{2}",OffsetFirstImage,Width,Height);
+                imageheaders[i] = new BLKImageHeader(OffsetFirstImage,Width,Height);    
+              }
+         }
+         
+         /// <summary>
+         /// 
+         /// </summary>
          /// <param name="imageheader"></param>
          /// <param name="RGBFormat"></param>
-         private void DecodeSprite(BLKImageHeader imageheader, UInt32 RGBFormat){
+         private void DecodeSprite(BLKImageHeader imageheader, UInt32 RGBFormat, UInt16 height, UInt16 width){
              byte[] frameEncoded = new byte[ imageheader.Width * imageheader.Height * 2];
-       //      originStream.Seek(imageheader.OffsetFirstImage, SeekOrigin.Begin);
-       //      originStream.Read(frameEncoded,0,frameEncoded.Length);
+             originStream.Seek(imageheader.Offset, SeekOrigin.Begin);
+             originStream.Read(frameEncoded,0,frameEncoded.Length);
              if(RGBFormat == 0){
               //   Decode555(frameEncoded, imageheader.Width, imageheader.Height);
              }
              else if(RGBFormat == 1){
-              //  Decode565(frameEncoded, imageheader.Width, imageheader.Height);
+                 //logger.Trace("{0}:{1}", height+1, width);
+                Decode565(frameEncoded, imageheader.Width, imageheader.Height,height,width);
              }
                  
          }
@@ -120,26 +155,32 @@ namespace C2eUtils.ImageFormats
          /// <param name="frameEncoded"></param>
          /// <param name="width"></param>
          /// <param name="height"></param>
-         private void Decode565(byte[] frameEncoded,UInt16 width , UInt16 height){
-                 logger.Trace("Decode 565 {0}x{1}",width,height);
-                 float[] pixels = new float[width * height * 4];
+         private void Decode565(byte[] frameEncoded,UInt16 width , UInt16 height, UInt16 heightColumn, UInt16 widthColumn){
+                 //logger.Trace("Decode 565 {0}x{1}",width,height);
                  int offset = 0;
-                 int offsetByte = 0;
+                 int offsetX=0;
+                 int offsetY = 0;
+                 int  offsetImage = 0;
                  UInt16 pixelcolor ;
                  for (int y = 0; y < height; y++)
                  {
                      for (int x = 0; x < width; x++)
                      {
+                         offsetX=  (widthColumn  * 128   + x );
+                         offsetY= ((heightColumn * 128 ) + y )  ;
+                         offsetImage =((offsetY  * ( header.BlocksWidth * 128 ) ) + offsetX) * 4 ;
+                     //    logger.Trace("{3}:{4} -> X: {0} Y: {1} O: {2}/{5}",offsetX ,offsetY ,offsetImage , heightColumn, widthColumn, imageTemp.Length);
+                        
                              offset     = ((y * width) + x) * 4; 
                              pixelcolor = BitConverter.ToUInt16(frameEncoded, offset/2);
                              // Stored in r-> g-> b-> a order.                
-                             pixels[offset]     = (( pixelcolor & 0xF800 ) >> 8 )  / 255f ;// 31f; 
-                             pixels[offset + 1] = (( pixelcolor & 0x07E0 ) >> 3 )  / 255f ;// 63f; 
-                             pixels[offset + 2] = (( pixelcolor & 0x001F ) << 3 )  / 255f ;// 31f; 
-                             pixels[offset + 3] = 1;
+                             imageTemp[offsetImage]     = (( pixelcolor & 0xF800 ) >> 8 )  / 255f ;// 31f; 
+                             imageTemp[offsetImage + 1] = (( pixelcolor & 0x07E0 ) >> 3 )  / 255f ;// 63f; 
+                             imageTemp[offsetImage + 2] = (( pixelcolor & 0x001F ) << 3 )  / 255f ;// 31f; 
+                             imageTemp[offsetImage + 3] = 1;
+                        
                      }
                  }
-                 imagedestintion.SetPixels(width, height, pixels);
          }
     }
     
@@ -155,9 +196,11 @@ namespace C2eUtils.ImageFormats
         public UInt16   BlocksHeight;
         
         
-        public BLKHeader(UInt32 rgbFormat, UInt16 sprites){
+        public BLKHeader(UInt32 rgbFormat, UInt16 sprites, UInt16 blocksWidth, UInt16 blocksHeight){
             RGBFormat = rgbFormat;
             Sprites = sprites;
+            BlocksWidth = blocksWidth;
+            BlocksHeight = blocksHeight;
         }
     }
     
@@ -169,7 +212,7 @@ namespace C2eUtils.ImageFormats
         public UInt16     Height;   // 128
         
         public BLKImageHeader(UInt32 offset, UInt16 width = 128 , UInt16 height = 128){
-             Offset = offset;
+             Offset = offset + 4;
              Width = width;
              Height = height;
          }

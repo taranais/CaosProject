@@ -1,18 +1,23 @@
 {
-  "version": "0.0.1-alpha",
-  "authors": ["Taranais"],
-  "description": "creatures serie games tools",
+    "version": "0.0.1-alpha",
+    "authors": ["Taranais"],
+    "description": "creatures serie games tools",
+    "compilationOptions": {
+             "emitEntryPoint": true
+            },        
     "configurations": {
         "Debug": {
         "emitEntryPoint": true,
         "compilationOptions": {
-            "define": ["DEBUG", "TRACE"]
+            "define": ["DEBUG", "TRACE"],
+             "emitEntryPoint": true
             }
         },
         "Release": {
         "emitEntryPoint": true,
         "compilationOptions": {
             "define": ["RELEASE", "TRACE"],
+            "emitEntryPoint": true,
             "optimize": true
             }
         }

@@ -61,10 +61,9 @@ namespace C2eUtils.ImageFormats
          {
              imagedestintion = image;
              originStream = stream;
-             
-              // leemos la cabecera del fichero 
               GetHeaderS16(originStream);
               GetImageHeaderS16(originStream);
+              imagedestintion.SetPixels(128, 128, new float[128 * 128 * 4]);   
               foreach (var imageHeader in imageheaders)
               {
                   DecodeSprite(imageHeader,header.RGBFormat);
@@ -142,7 +141,6 @@ namespace C2eUtils.ImageFormats
                  logger.Trace("Decode 565 {0}x{1}",width,height);
                  float[] pixels = new float[width * height * 4];
                  int offset = 0;
-                 int offsetByte = 0;
                  UInt16 pixelcolor ;
                  for (int y = 0; y < height; y++)
                  {
@@ -157,7 +155,15 @@ namespace C2eUtils.ImageFormats
                              pixels[offset + 3] = 1;
                      }
                  }
-                 imagedestintion.SetPixels(width, height, pixels);
+                 if(header.Sprites > 1){
+                    ImageFrame frame = new ImageFrame();
+                    frame.FrameDelay = 1; 
+                    frame.SetPixels(width, height, pixels);   
+                    imagedestintion.Frames.Add(sprite);
+                 }
+                 else{
+                    imagedestintion.SetPixels(width, height, pixels);   
+                 }
          }
     }
     

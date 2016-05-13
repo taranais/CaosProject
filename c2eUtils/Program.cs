@@ -41,7 +41,7 @@ namespace C2eUtils
    
    string file=@"C:\Users\taran\Documents\Creatures\Docking Station\Images\000e.c16";
    file = @"C:\Users\taran\Documents\Creatures\Docking Station\My Worlds\test\Images\001-star-3ggu4-qbmf6-k3r8v-nphx4-3.s16";
-  // file = @"C:\Program Files\GOG.com\Creatures Exodus\Docking Station\Backgrounds\NornMeso039.blk";
+   file = @"C:\Program Files\GOG.com\Creatures Exodus\Docking Station\Backgrounds\NornMeso039.blk";
   //     x16Loader loader = new x16Loader(file);
         
         for (int i=0; i<1000 ; i++) {
