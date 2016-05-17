@@ -3,14 +3,14 @@
     "authors": ["Taranais"],
     "description": "creatures serie games tools",
     "compilationOptions": {
-             "emitEntryPoint": true
-            },        
+            "emitEntryPoint": true
+            },
     "configurations": {
         "Debug": {
         "emitEntryPoint": true,
         "compilationOptions": {
             "define": ["DEBUG", "TRACE"],
-             "emitEntryPoint": true
+            "emitEntryPoint": true
             }
         },
         "Release": {
@@ -21,7 +21,7 @@
             "optimize": true
             }
         }
-    },    
+    },
     "scripts": {
         "prebuild": "echo before building",
         "postbuild": "echo after building",
@@ -31,13 +31,18 @@
         "postrestore": "echo after restoring packages"
     },
     "dependencies": {
-        "NETStandard.Library": "1.0.0-rc2-23811",
-        "System.IO": "4.1.0-rc2-23811",
-        "System.IO.MemoryMappedFiles": "4.0.0-rc2-23811",
+        "Microsoft.NETCore.App": {
+            "type": "platform",
+            "version": "1.0.0-rc2-3002702"
+        },
+        "System.IO": "4.1.0-*",
+        "System.IO.MemoryMappedFiles": "4.0.0-*",
         "NLog": "4.4.0-beta4",
         "ImageProcessorCore": "1.0.0-alpha-783"
     },
     "frameworks": {
-        "dnxcore50": {}
+        "netcoreapp1.0": {
+            "imports": "dnxcore50"
+        }
     }
 }

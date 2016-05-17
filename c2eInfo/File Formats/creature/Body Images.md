@@ -1,81 +1,84 @@
+# Images and Attachments
 
-Images and Attachments
 This article details the formula used when creating image files and attachments for brained-creatures.
 
-The sprite and attachment files for a creature are named using a formula which describes the body part, gender, stage of life and variant. The table below shows the values: 
-  
+The sprite and attachment files for a creature are named using a formula which describes the body part, gender, stage of life and variant. The table below shows the values:
+
+LXYZ . extension
+    L: Body Part
+    X: Gender
+    Y: Stage of Life
+    Z: Variant
+    .extension: s16, c16 or ATT
 
 
-LXYZ . extension 
- 
-L: Body Part X: Gender Y: Stage of Life Z: Variant .extension: s16, c16 or ATT 
+
+|Body Part| Gender| Stage of Life | Norn Variants|
+|---------|-------|---------------|--------------|
+|A: Head  |0: Male Norn| 0: Baby  | A: Bruin     |
+|B: Body  |1: Male Grendel| 1: Child| B: Bengal  |
+|C: Left thigh |2: Male Ettin| 2: Adolescent| C: Civet
+|D: Left shin  |3: Male Geat |3: Youth||
+|E: Left foot  |4: Female Norn| 4: Adult||
+|F: Right thigh| 5: Female Grendel| 5: Old||
+|G: Right shin |6: Female Ettin |6: Senile||
+|H: Right foot |7: Female Geat|||
+|I: Left humerus||||
+|J: Left radius||||
+|K: Right humerus||||
+|L: Right radius||||
+|M: Tail root||||
+|N: Tail tip||||
 
 
+## Sprite File Arrangement
 
-Body Part Gender Stage of Life Norn Variants 
-A: Head 0: Male Norn 0: Baby A: Bruin 
-B: Body 1: Male Grendel 1: Child B: Bengal 
-C: Left thigh 2: Male Ettin 2: Adolescent C: Civet 
-D: Left shin 3: Male Geat 3: Youth   
-E: Left foot 4: Female Norn 4: Adult   
-F: Right thigh 5: Female Grendel 5: Old   
-G: Right shin 6: Female Ettin 6: Senile   
-H: Right foot 7: Female Geat     
-I: Left humerus       
-J: Left radius       
-K: Right humerus       
-L: Right radius       
-M: Tail root       
-N: Tail tip       
+Each sprite file for each body part needs to be arranged in a consistent order to allow the correct facial expressions, for example, to be displayed.
 
+The ordering that is used can be summed up by describing it as having each body part arranged in the following order:
 
-Sprite File Arrangement
- Each sprite file for each body part needs to be arranged in a consistent order to allow the correct facial expressions, for example, to be displayed. 
+Face Left - 4 poses
+Face Right - 4 poses
+Face Front - 4 poses
+Face Back - 4 poses.
 
- The ordering that is used can be summed up by describing it as having each body part arranged in the following order: 
-Face Left - 4 poses 
-Face Right - 4 poses 
-Face Front - 4 poses 
-Face Back - 4 poses. 
+But this doesn't describe the specifics of, for example, how the four poses for each direction are arranged - or mention how the head graphics use the previous ordering per facial expression. The easiest way to explain is to illustrate it, so each body part in the table above is linked to an example image showing the ordering of the parts of the sprite file. Click on the Body Part name for the image in a pop-up window.
 
- But this doesn't describe the specifics of, for example, how the four poses for each direction are arranged - or mention how the head graphics use the previous ordering per facial expression. The easiest way to explain is to illustrate it, so each body part in the table above is linked to an example image showing the ordering of the parts of the sprite file. Click on the Body Part name for the image in a pop-up window.
+### Pose Genes
 
-Pose Genes
- Pose Genes are made up of a 15 character string, the ordering of each element is as follows: Direction, Head, Body, Left Thigh, Left Shin, Left Foot, Right Thigh, Right Shin, Right Foot, Left Humerus, Left Radius, Right Humerus, Right Radius, Tail Root, Tail Tip. 
+Pose Genes are made up of a 15 character string, the ordering of each element is as follows: Direction, Head, Body, Left Thigh, Left Shin, Left Foot, Right Thigh, Right Shin, Right Foot, Left Humerus, Left Radius, Right Humerus, Right Radius, Tail Root, Tail Tip.
 
- The meaning of each pose gene element is explained below: 
+The meaning of each pose gene element is explained below:
 
- Direction - 0: Face away from screen 
- Direction - 1: Face out of screen 
- Direction - 2: Face right 
- Direction - 3: Face left 
- Direction: - ?: Face towards _IT_ 
- Direction - !: Face away from _IT_ 
- Head - ?: Look towards _IT_ 
+Direction - 0: Face away from screen
+Direction - 1: Face out of screen
+Direction - 2: Face right
+Direction - 3: Face left
+Direction: - ?: Face towards _IT_
+Direction - !: Face away from _IT_
+Head - ?: Look towards _IT_
 
- For all Parts - 0, 1, 2, 3: Furthest down/back pose to furthest up/forward pose. Each body part has 4 degrees of rotation on it to the left and right, forward and backwards. 
+For all Parts - 0, 1, 2, 3: Furthest down/back pose to furthest up/forward pose. Each body part has 4 degrees of rotation on it to the left and right, forward and backwards.
 
- For all Parts - X: No change in part arrangement 
+For all Parts - X: No change in part arrangement
 
 
-The Seven Stages of Norn
-
-
+### The Seven Stages of Norn
 
 Each creature has 7 life stages that they pass through, these are:
 
-Stage of Life Number 
-Baby 0 
-Child 1 
-Adolescent 2 
-Youth 3 
-Adult 4 
-Old 5 
-Senile 6 
+Stage of Life Number
+Baby 0
+Child 1
+Adolescent 2
+Youth 3
+Adult 4
+Old 5
+Senile 6
 
 These numbers are used for sprite/attachment naming (as mentioned above), but also come into play during genome creation - switch on times, for example. Not all life stages need a graphical representation - and as shipped C3/DS does not use them all. Instead the creature will use graphics for the previous life stage, if it can not find ones specifically for the stage it is in now.
 
-Understanding and Editing ATTs
+## Understanding and Editing ATTs
 
 A Creature's genome tells it which breed slot will be used for each body part, and sprites give the breed its appearance. But the information that tells the game where the body parts connect to one another is stored in the .att files.
 

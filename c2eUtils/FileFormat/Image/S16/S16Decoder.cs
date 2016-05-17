@@ -159,7 +159,7 @@ namespace C2eUtils.ImageFormats
                     ImageFrame frame = new ImageFrame();
                     frame.FrameDelay = 1; 
                     frame.SetPixels(width, height, pixels);   
-                    imagedestintion.Frames.Add(sprite);
+                    imagedestintion.Frames.Add(frame);
                  }
                  else{
                     imagedestintion.SetPixels(width, height, pixels);   
