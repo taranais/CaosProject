@@ -35,13 +35,13 @@ namespace C2eUtils.ImageFormats
         /// <inheritdoc/>
         public void Encode(ImageBase image, Stream stream)
         {
-         //   GifEncoderCore encoder = new GifEncoderCore
-         //   {
-         //       Quality = this.Quality,
-         //       Quantizer = this.Quantizer,
-         //       Threshold = this.Threshold
-         //   };
-         //   encoder.Encode(image, stream);
+        //   GifEncoderCore encoder = new GifEncoderCore
+        //   {
+        //       Quality = this.Quality,
+        //       Quantizer = this.Quantizer,
+        //       Threshold = this.Threshold
+        //   };
+        //   encoder.Encode(image, stream);
         }
     }
 }

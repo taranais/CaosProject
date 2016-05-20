@@ -20,15 +20,49 @@ namespace C2eUtils
     {
         public static void Main(string[] args)
         {
-            
+
         Config();
-        
-      //  CaosInjector caosCommand = new CaosInjector(new SharedMemoryInjector("Docking Station"));
+        testImages();
+        //testCaos();
+      }
+
+      private static void testImages()
+      {
+
+        string filec16 = @"C:\Users\taran\Documents\Creatures\Docking Station\Images\000e.c16";
+        string files16 = @"C:\Users\taran\Documents\Creatures\Docking Station\My Worlds\test\Images\001-star-3ggu4-qbmf6-k3r8v-nphx4-3.s16";
+        string fileblk = @"C:\Program Files\GOG.com\Creatures Exodus\Docking Station\Backgrounds\DS_splash.blk";
+
+        string ficherosalida = @"a.png";
+
+        using (FileStream stream = File.OpenRead(fileblk))
+        {
+          using (FileStream output = File.OpenWrite(ficherosalida))
+          {
+            IImageFormat format = new JpegFormat();
+            IImageFormat[] formats = new IImageFormat[1];
+            formats[0]= new BLKFormat();
+            using (Image image = new Image(stream, formats))
+            {
+              //Image frame = new Image( image.Frames[2] );
+              //frame.Save(output);
+              //  image.Save(output, new BmpEncoder());
+              image.Save(output, new PngEncoder());
+              //  image.Save(output, new JpgEncoder());
+            }
+          }
+        }
+      }
+      private static void testCaos()
+      {
+        CaosInjector caosCommand = new CaosInjector(new SharedMemoryInjector("Docking Station"));
         //CaosInjector caosCommand = new CaosInjector(new SocketsInjector("Docking Station"));
-     //   caosCommand.Init();
-        
-        
-        String textToExecute =
+        caosCommand.Init();
+
+        string test  = "outv 99";
+        caosCommand.SendCaosCommand(test);
+
+        String getallcreatures =
                           "enum 4 0 0 " +                    // iterate creatures
                             "doif targ <> null " +           // check not null ??
                               "sets va01 gtos 0 " +          // get moniker to va01
@@ -36,48 +70,17 @@ namespace C2eUtils
                               "outs \" | \" " +              // PRINT separator
                             "endi " +
                           "next ";
+        caosCommand.SendCaosCommand(getallcreatures);
 
-   //    textToExecute= "outv 99";
-   
-   string file=@"C:\Users\taran\Documents\Creatures\Docking Station\Images\000e.c16";
-   file = @"C:\Users\taran\Documents\Creatures\Docking Station\My Worlds\test\Images\001-star-3ggu4-qbmf6-k3r8v-nphx4-3.s16";
-   file = @"C:\Program Files\GOG.com\Creatures Exodus\Docking Station\Backgrounds\DS_splash.blk";
-  //     x16Loader loader = new x16Loader(file);
-        
-        for (int i=0; i<1000 ; i++) {
-      //    caosCommand.SendCaosCommand(textToExecute);    
-       //   Thread.Sleep(1000);
-        }
-     //   caosCommand.Stop();
-     
-     string ficherosalida = @"a.png";
-     
-          using (FileStream stream = File.OpenRead(file)){
-            
-            using (FileStream output = File.OpenWrite(ficherosalida))
-            {
-               IImageFormat format = new JpegFormat();
-               IImageFormat[] formats = new IImageFormat[1];
-               formats[0]= new BLKFormat();
-                using (Image image = new Image(stream, formats))
-                {
-                  //Image frame = new Image( image.Frames[2] );
-                  //frame.Save(output);
-                  //  image.Save(output, new BmpEncoder());
-                  image.Save(output, new PngEncoder());
-                  //  image.Save(output, new JpgEncoder());
-                }
-            }
-          }
-          
+        caosCommand.Stop();
       }
- 
+
         private static void Config(){
-            
+
         // Step 1. Create configuration object
         var config = new LoggingConfiguration();
 
-        // Step 2. Create targets and add them to the configuration 
+        // Step 2. Create targets and add them to the configuration
         var consoleTarget = new ColoredConsoleTarget();
         config.AddTarget("console", consoleTarget);
 
