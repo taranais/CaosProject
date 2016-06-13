@@ -33,6 +33,7 @@ bld/
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
+c2eUtils.Test/TestOutput
 
 # NUNIT
 *.VisualState.xml

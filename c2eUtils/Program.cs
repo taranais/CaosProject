@@ -22,37 +22,9 @@ namespace C2eUtils
         {
 
         Config();
-        testImages();
-        //testCaos();
+        testCaos();
       }
 
-      private static void testImages()
-      {
-
-        string filec16 = @"C:\Users\taran\Documents\Creatures\Docking Station\Images\000e.c16";
-        string files16 = @"C:\Users\taran\Documents\Creatures\Docking Station\My Worlds\test\Images\001-star-3ggu4-qbmf6-k3r8v-nphx4-3.s16";
-        string fileblk = @"C:\Program Files\GOG.com\Creatures Exodus\Docking Station\Backgrounds\DS_splash.blk";
-
-        string ficherosalida = @"a.png";
-
-        using (FileStream stream = File.OpenRead(fileblk))
-        {
-          using (FileStream output = File.OpenWrite(ficherosalida))
-          {
-            IImageFormat format = new JpegFormat();
-            IImageFormat[] formats = new IImageFormat[1];
-            formats[0]= new BLKFormat();
-            using (Image image = new Image(stream, formats))
-            {
-              //Image frame = new Image( image.Frames[2] );
-              //frame.Save(output);
-              //  image.Save(output, new BmpEncoder());
-              image.Save(output, new PngEncoder());
-              //  image.Save(output, new JpgEncoder());
-            }
-          }
-        }
-      }
       private static void testCaos()
       {
         CaosInjector caosCommand = new CaosInjector(new SharedMemoryInjector("Docking Station"));
@@ -72,6 +44,17 @@ namespace C2eUtils
                           "next ";
         caosCommand.SendCaosCommand(getallcreatures);
 
+        string moniker= "001-tree-czkfm-custf-q2u2j-jqp4v";
+        // TARG (command) agent (agent)
+        // NORN (command) creature (agent)
+        // SETA (command) var (variable) value (agent)
+        // MTOC (agent) moniker (string)
+        string testexport  =  "targ mtoc \""  + moniker + "\" "
+                            + "pray expo \"WARP\" ";
+        caosCommand.SendCaosCommand(testexport);
+
+        // CHEM (float) chemical (integer)
+        // Returns concentration (0.0 to 1.0) of chemical (1 to 255) in the target creature's bloodstream.
         caosCommand.Stop();
       }
 

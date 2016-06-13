@@ -4,22 +4,22 @@ using System.IO.MemoryMappedFiles;
 using NLog;
 
 namespace C2eUtils.Caos
-{    
+{
     /// <summary>
-   /// 
-   /// </summary>
-   public class BufferLayout{ 
+    ///
+    /// </summary>
+    public class BufferLayout{
         private static Logger Log = LogManager.GetCurrentClassLogger();
-     
+
         public string   c2e                     { get; private set; }
         public int      ProcessID               { get; private set; }
         public int      ResultCode              { get; private set; }
         public uint     Size                    { get; private set; }
         public uint     SharedMemoryBufferSize  { get; private set; }
         public byte[]   Data                    { get; private set; }
-        
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="MemViewAccessor"></param>
         /// <returns></returns>
@@ -33,9 +33,9 @@ namespace C2eUtils.Caos
             ControlCharSet = Encoding.ASCII.GetString(Caracteres);
             return ControlCharSet;
         }
-       
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="CaosAsString"></param>
         /// <param name="Action"></param>
@@ -43,15 +43,15 @@ namespace C2eUtils.Caos
             Log.Trace("Prepare buffer layout");
             Data= GeneratePlayload(CaosAsString,Action);
             Size = Convert.ToUInt32(Data.Length);
-       }
-       
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="CaosAsString"></param>
-       /// <param name="Action"></param>
-       /// <returns></returns>
-       private byte[] GeneratePlayload(string CaosAsString, string Action){
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="CaosAsString"></param>
+        /// <param name="Action"></param>
+        /// <returns></returns>
+        private byte[] GeneratePlayload(string CaosAsString, string Action){
             byte[] action = Encoding.ASCII.GetBytes(Action);
             byte[] caos = Encoding.ASCII.GetBytes(CaosAsString);
             byte[] rv = new byte[action.Length + caos.Length + 2];
@@ -60,10 +60,10 @@ namespace C2eUtils.Caos
             System.Buffer.BlockCopy(caos, 0 , rv, action.Length + 1, caos.Length);
             System.Buffer.SetByte(rv, rv.Length -1, 0); // '\0' null terminated text
             return rv;
-       }
-       
+        }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="MemViewAccessor"></param>
         public void SetSharedMemory(MemoryMappedViewAccessor MemViewAccessor) {
@@ -74,9 +74,9 @@ namespace C2eUtils.Caos
                 MemViewAccessor.Write(24 + i,Data[i]);
             }
         }
-        
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="MemViewAccessor"></param>
         public void GetSharedMemory(MemoryMappedViewAccessor MemViewAccessor)
@@ -93,30 +93,30 @@ namespace C2eUtils.Caos
                 Data[i] = MemViewAccessor.ReadByte(24 + i);
             }
         }
-        
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         private static string stringCode(){
             string s = "c2e@";
-            return stringToASCII(s);        
+            return stringToASCII(s);
         }
-        
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
         private static string stringToASCII(string code){
             byte[] utf = System.Text.Encoding.ASCII.GetBytes(code);
-            return System.Text.Encoding.ASCII.GetString(utf);        
+            return System.Text.Encoding.ASCII.GetString(utf);
         }
-        
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
-        /// <returns></returns> 
+        /// <returns></returns>
         public CaosResult GetCaosResult()
         {
             if (!c2e.Equals(stringCode()))
@@ -132,21 +132,22 @@ namespace C2eUtils.Caos
             return new CaosResult(ResultCode, Data, ProcessID);
         }
     }
-    
+
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class CaosResult
     {
         public bool     Failed                  { get; private set; }
         public int      ProcessID               { get; private set; }
-        public string   Content                 { get; private set; }
-        
+        //public string   Content                 { get; private set; }
+        public byte[]   Content                 { get; private set; }
+
         public CaosResult(int failed,  byte[] content, int processID)
         {
-            Failed = Convert.ToBoolean(failed);
-            Content = Encoding.ASCII.GetString(content);
-            ProcessID = processID;
+            Failed      = Convert.ToBoolean(failed);
+            Content     = content;
+            ProcessID   = processID;
         }
     }
 }

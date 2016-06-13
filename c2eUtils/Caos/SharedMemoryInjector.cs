@@ -5,26 +5,26 @@ using System.IO.MemoryMappedFiles;
 using System.Threading;
 
 namespace C2eUtils.Caos
-{   
+{
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class SharedMemoryInjector : ACaosInjector
     {
-        
+
         private Mutex mutex;
         private MemoryMappedFile memfile;
         private MemoryMappedViewAccessor memViewAccessor;
         private EventWaitHandle resultEventHandle;
         private EventWaitHandle requestEventHandle;
-        
+
         public SharedMemoryInjector(string game) : base(game) { }
-        
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
-        public override bool Init(){    
+        public override bool Init(){
             bool exito= true;
             try
             {
@@ -32,7 +32,7 @@ namespace C2eUtils.Caos
                 mutex = Mutex.OpenExisting(Game + "_mutex");
                 memfile = MemoryMappedFile.OpenExisting(Game + "_mem");
                 memViewAccessor = memfile.CreateViewAccessor();
-                resultEventHandle = EventWaitHandle.OpenExisting(Game + "_result");         
+                resultEventHandle = EventWaitHandle.OpenExisting(Game + "_result");
                 requestEventHandle = EventWaitHandle.OpenExisting(Game + "_request");
             }
             catch(System.Threading.WaitHandleCannotBeOpenedException ex)
@@ -46,21 +46,21 @@ namespace C2eUtils.Caos
             }
             return exito;
         }
-        
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public override bool Stop(){
             bool exito= true;
             try{
-                Log.Trace("Injector {0} Stop",Game);   
+                Log.Trace("Injector {0} Stop",Game);
                 requestEventHandle.Dispose();
                 resultEventHandle.Dispose();
                 memViewAccessor.Dispose();
                 memfile.Dispose();
                 mutex.Dispose();
-            } 
+            }
             catch (System.NullReferenceException ex)
             {
                 Log.Error(ex, "Shared Memory fail on Stop: {0}",Game);
@@ -72,9 +72,9 @@ namespace C2eUtils.Caos
             }
             return exito;
         }
-        
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="CaosAsString"></param>
         /// <param name="Action"></param>
@@ -90,7 +90,8 @@ namespace C2eUtils.Caos
                 CaosBuffer.GetSharedMemory(memViewAccessor);
                 mutex.ReleaseMutex();
                 caosResult = CaosBuffer.GetCaosResult();
-                Log.Trace("Caos result fail : {0} Content: {1} ",caosResult.Failed,caosResult.Content);
+                Log.Trace("Caos result fail : {0} Content: {1} ",caosResult.Failed,
+                            System.Text.Encoding.ASCII.GetString(caosResult.Content));
         }
     }
 }
