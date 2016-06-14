@@ -33,7 +33,7 @@ namespace C2eUtils.Caos
         /// <returns></returns>
         public bool Init()
         {
-          return Injector.Init();
+            return Injector.Init();
         }
 
         /// <summary>
