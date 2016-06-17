@@ -6,7 +6,7 @@ using NLog;
 namespace C2eUtils.Caos
 {
     /// <summary>
-    ///
+    /// SharedMemory data srtucture
     /// </summary>
     public class BufferLayout{
         private static Logger Log = LogManager.GetCurrentClassLogger();
@@ -15,11 +15,12 @@ namespace C2eUtils.Caos
         public int      ProcessID               { get; private set; }
         public int      ResultCode              { get; private set; }
         public uint     Size                    { get; private set; }
-        public uint     SharedMemoryBufferSize  { get; private set; }
         public byte[]   Data                    { get; private set; }
 
+        public uint     SharedMemoryBufferSize  { get; private set; }
+
         /// <summary>
-        ///
+        /// Gets control chars
         /// </summary>
         /// <param name="MemViewAccessor"></param>
         /// <returns></returns>
@@ -35,7 +36,7 @@ namespace C2eUtils.Caos
         }
 
         /// <summary>
-        ///
+        /// Prepare srtucture to write on SharedMemory
         /// </summary>
         /// <param name="CaosAsString"></param>
         /// <param name="Action"></param>
@@ -46,7 +47,7 @@ namespace C2eUtils.Caos
         }
 
         /// <summary>
-        ///
+        /// Generate byte array to write on SharedMemory
         /// </summary>
         /// <param name="CaosAsString"></param>
         /// <param name="Action"></param>
@@ -56,14 +57,14 @@ namespace C2eUtils.Caos
             byte[] caos = Encoding.ASCII.GetBytes(CaosAsString);
             byte[] rv = new byte[action.Length + caos.Length + 2];
             System.Buffer.BlockCopy(action, 0, rv, 0, action.Length);
-            System.Buffer.SetByte(rv, action.Length, 13); // '\n'
+            System.Buffer.SetByte(rv, action.Length, 13);
             System.Buffer.BlockCopy(caos, 0 , rv, action.Length + 1, caos.Length);
-            System.Buffer.SetByte(rv, rv.Length -1, 0); // '\0' null terminated text
+            System.Buffer.SetByte(rv, rv.Length -1, 0);
             return rv;
         }
 
         /// <summary>
-        ///
+        /// Write on SharedMemory
         /// </summary>
         /// <param name="MemViewAccessor"></param>
         public void SetSharedMemory(MemoryMappedViewAccessor MemViewAccessor) {
@@ -76,7 +77,7 @@ namespace C2eUtils.Caos
         }
 
         /// <summary>
-        ///
+        /// Read SharedMemory
         /// </summary>
         /// <param name="MemViewAccessor"></param>
         public void GetSharedMemory(MemoryMappedViewAccessor MemViewAccessor)
@@ -95,7 +96,7 @@ namespace C2eUtils.Caos
         }
 
         /// <summary>
-        ///
+        /// get control string
         /// </summary>
         /// <returns></returns>
         private static string stringCode(){
@@ -104,7 +105,7 @@ namespace C2eUtils.Caos
         }
 
         /// <summary>
-        ///
+        /// Converts to ASCII
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
@@ -114,7 +115,7 @@ namespace C2eUtils.Caos
         }
 
         /// <summary>
-        ///
+        /// Get CaosResult from readed data
         /// </summary>
         /// <returns></returns>
         public CaosResult GetCaosResult()
@@ -133,21 +134,4 @@ namespace C2eUtils.Caos
         }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    public class CaosResult
-    {
-        public bool     Failed                  { get; private set; }
-        public int      ProcessID               { get; private set; }
-        //public string   Content                 { get; private set; }
-        public byte[]   Content                 { get; private set; }
-
-        public CaosResult(int failed,  byte[] content, int processID)
-        {
-            Failed      = Convert.ToBoolean(failed);
-            Content     = content;
-            ProcessID   = processID;
-        }
-    }
 }

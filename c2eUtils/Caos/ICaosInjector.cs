@@ -11,9 +11,25 @@ namespace C2eUtils.Caos
     /// </summary>
     public interface ICaosInjector
     {
+        /// <summary>
+        /// Configure and Starts CaosInjector
+        /// </summary>
+        /// <returns></returns>
         bool Init();
+
+        /// <summary>
+        /// Stops CaosInjector
+        /// </summary>
+        /// <returns></returns>
         bool Stop();
-        void SendCaos(string CaosAsString, string Action);
+
+        /// <summary>
+        /// Send Caos over injector
+        /// </summary>
+        /// <param name="CaosAsString"></param>
+        /// <param name="Action"></param>
+        /// <returns></returns>
+        CaosResult SendCaos(string CaosAsString, string Action);
     }
 
     /// <summary>
@@ -22,12 +38,16 @@ namespace C2eUtils.Caos
     public abstract class ACaosInjector : ICaosInjector
     {
         protected Logger Log { get; private set; }
+        /// <summary>
+        ///  gets Game's name
+        /// </summary>
+        /// <returns></returns>
         public string Game {get; private set;}
 
         /// <summary>
-        ///
+        /// Create CaosInjector for especified engine game
         /// </summary>
-        /// <param name="game"></param>
+        /// <param name="game">especified engine's game name</param>
         protected ACaosInjector (string game)
         {
             Game = game;
@@ -35,23 +55,11 @@ namespace C2eUtils.Caos
             Log.Trace("Injector Created");
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public abstract bool Init();
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public abstract bool Stop();
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="CaosAsString"></param>
-        /// <param name="Action"></param>
-        public abstract void SendCaos(string CaosAsString, string Action);
+        /// <inheritdoc/>
+        public abstract CaosResult SendCaos(string CaosAsString, string Action);
     }
 }

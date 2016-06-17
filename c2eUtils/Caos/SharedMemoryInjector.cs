@@ -20,10 +20,7 @@ namespace C2eUtils.Caos
 
         public SharedMemoryInjector(string game) : base(game) { }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public override bool Init(){
             bool exito= true;
             try
@@ -47,10 +44,7 @@ namespace C2eUtils.Caos
             return exito;
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public override bool Stop(){
             bool exito= true;
             try{
@@ -73,12 +67,8 @@ namespace C2eUtils.Caos
             return exito;
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="CaosAsString"></param>
-        /// <param name="Action"></param>
-        public override void SendCaos(string CaosAsString, string Action){
+        /// <inheritdoc/>
+        public override CaosResult SendCaos(string CaosAsString, string Action){
                 Log.Trace("Executing Caos for {0}",Game);
                 CaosResult caosResult = null;
                 mutex.WaitOne();
@@ -92,6 +82,7 @@ namespace C2eUtils.Caos
                 caosResult = CaosBuffer.GetCaosResult();
                 Log.Trace("Caos result fail : {0} Content: {1} ",caosResult.Failed,
                             System.Text.Encoding.ASCII.GetString(caosResult.Content));
+                return caosResult;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace C2eUtils.Caos
         private ICaosInjector Injector;
 
         /// <summary>
-        ///
+        /// Create CaosInjector with especified ICaosInjector
         /// </summary>
         /// <param name="injector"></param>
         public CaosInjector(ICaosInjector injector)
@@ -18,17 +18,17 @@ namespace C2eUtils.Caos
         }
 
         /// <summary>
-        ///
+        /// Send Caos over injector
         /// </summary>
         /// <param name="CaosAsString"></param>
-        /// <param name="Action"></param>
-        public void SendCaosCommand(string CaosAsString, string Action = "execute")
+        /// <param name="Action">default: execute</param>
+        public CaosResult SendCaosCommand(string CaosAsString, string Action = "execute")
         {
-            Injector.SendCaos(CaosAsString, Action);
+            return Injector.SendCaos(CaosAsString, Action);
         }
 
         /// <summary>
-        ///
+        /// Configure and Starts CaosInjector
         /// </summary>
         /// <returns></returns>
         public bool Init()
@@ -37,12 +37,12 @@ namespace C2eUtils.Caos
         }
 
         /// <summary>
-        ///
+        /// Stops CaosInjector
         /// </summary>
         /// <returns></returns>
         public bool Stop()
         {
-          return Injector.Stop();
+            return Injector.Stop();
         }
     }
 }

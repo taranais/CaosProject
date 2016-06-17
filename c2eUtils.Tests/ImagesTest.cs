@@ -5,15 +5,15 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Runner.DotNet;
 
-using C2eUtils.ImageFormats;
-
 using ImageProcessorCore;
 using ImageProcessorCore.Formats;
 using ImageProcessorCore.Quantizers;
 
+using C2eUtils.ImageFormats;
 
 
-namespace c2eUtils.Tests
+
+namespace c2eUtils.Tests.C2eImages
 {
     public class  C2EImagesTest
     {
@@ -30,15 +30,15 @@ namespace c2eUtils.Tests
             {
                 IImageFormat[] formats = new IImageFormat[1];
                 // formats[0]= new C16Format();
-                using (Image image = new Image(stream, formats))
-                {
+                //using (Image image = new Image(stream, formats))
+                //{
                 //   string encodeFilename = "TestOutput/Decode/c16/" + Path.GetFileNameWithoutExtension(file) + ".png";
                 //   using (FileStream output = File.OpenWrite(encodeFilename))
                 //   {
                 //       Image frame = new Image( image.Frames[0] );
                 //       frame.Save(output, new PngEncoder());
                 //   }
-                }
+                //}
             }
         }
 
@@ -59,7 +59,7 @@ namespace c2eUtils.Tests
                     string encodeFilename = "TestOutput/Decode/s16/" + Path.GetFileNameWithoutExtension(file) + ".png";
                     using (FileStream output = File.OpenWrite(encodeFilename))
                     {
-                        im.Save(output, new PngEncoder());
+                        image.Save(output, new PngEncoder());
                     }
                 }
             }
