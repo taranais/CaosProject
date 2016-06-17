@@ -18,7 +18,7 @@ namespace c2eUtils.Tests.C2eImages
     public class  C2EImagesTest
     {
 
-        [Fact]
+        [Fact(Skip="unImplemented")]
         public void c16Image()
         {
             if (!Directory.Exists("TestOutput/Decode/c16"))
