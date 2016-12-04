@@ -33,7 +33,7 @@ bld/
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
-c2eUtils.Test/TestOutput
+c2eUtils.Test/TestOutput/*
 
 # NUNIT
 *.VisualState.xml
@@ -271,3 +271,9 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+c2eUtils.Tests/TestFiles/Areria_001_twig_2z4ce_72266_k3g7z_2jfww.ds.creature
+c2eUtils.Tests/TestOutput/Blocks/001-star-3ggu4-qbmf6-k3r8v-nphx4.DSEX
+c2eUtils.Tests/TestOutput/Blocks/001-star-3ggu4-qbmf6-k3r8v-nphx4.DSEX.creature
+c2eUtils.Tests/TestOutput/Blocks/001-star-3ggu4-qbmf6-k3r8v-nphx4-3.DSEX.photo
+c2eUtils.Tests/TestOutput/Blocks/001-star-3ggu4-qbmf6-k3r8v-nphx4.DSEX.glist.creature
+c2eUtils.Tests/TestOutput/Blocks/001-star-3ggu4-qbmf6-k3r8v-nphx4.DSEX.genetics

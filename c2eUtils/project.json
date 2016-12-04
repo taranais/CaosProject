@@ -38,7 +38,8 @@
         "System.IO": "4.1.0-*",
         "System.IO.MemoryMappedFiles": "4.0.0-*",
         "NLog": "4.4.0-*",
-        "ImageProcessorCore": "1.0.0-alpha-*"
+        "ImageProcessorCore": "1.0.0-alpha-860",
+        "ComponentAce.Compression.Libs.zlib" :"1.0.4"
     },
     "frameworks": {
         "netcoreapp1.0": {

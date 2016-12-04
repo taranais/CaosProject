@@ -23,40 +23,45 @@ namespace C2eUtils
 
         Config();
         testCaos();
-      }
+        }
 
-      private static void testCaos()
-      {
-        CaosInjector caosCommand = new CaosInjector(new SharedMemoryInjector("Docking Station"));
-        //CaosInjector caosCommand = new CaosInjector(new SocketsInjector("Docking Station"));
-        caosCommand.Init();
+        private static void testCaos()
+        {
+          CaosInjector caosCommand = new CaosInjector(new SharedMemoryInjector("Docking Station"));
+          //CaosInjector caosCommand = new CaosInjector(new SocketsInjector("Docking Station"));
+          
+          if(caosCommand.Init())
+          {
+            string test  = "outv 99";
+            caosCommand.SendCaosCommand(test);
 
-        string test  = "outv 99";
-        caosCommand.SendCaosCommand(test);
+            String getallcreatures =
+                              "enum 4 0 0 " +                    // iterate creatures
+                                "doif targ <> null " +           // check not null ??
+                                  "sets va01 gtos 0 " +          // get moniker to va01
+                                  "outs va01 " +                 // PRINT moniker
+                                  "outs \" | \" " +              // PRINT separator
+                                "endi " +
+                              "next ";
 
-        String getallcreatures =
-                          "enum 4 0 0 " +                    // iterate creatures
-                            "doif targ <> null " +           // check not null ??
-                              "sets va01 gtos 0 " +          // get moniker to va01
-                              "outs va01 " +                 // PRINT moniker
-                              "outs \" | \" " +              // PRINT separator
-                            "endi " +
-                          "next ";
-        caosCommand.SendCaosCommand(getallcreatures);
+    
+            caosCommand.SendCaosCommand(getallcreatures);
 
-        string moniker= "001-tree-czkfm-custf-q2u2j-jqp4v";
-        // TARG (command) agent (agent)
-        // NORN (command) creature (agent)
-        // SETA (command) var (variable) value (agent)
-        // MTOC (agent) moniker (string)
-        string testexport  =  "targ mtoc \""  + moniker + "\" "
-                            + "pray expo \"WARP\" ";
-        caosCommand.SendCaosCommand(testexport);
+            string moniker= "001-tree-czkfm-custf-q2u2j-jqp4v";
+            // TARG (command) agent (agent)
+            // NORN (command) creature (agent)
+            // SETA (command) var (variable) value (agent)
+            // MTOC (agent) moniker (string)
+            string testexport  =  "targ mtoc \""  + moniker + "\" "
+                                + "pray expo \"WARP\" ";
+            caosCommand.SendCaosCommand(testexport);
 
-        // CHEM (float) chemical (integer)
-        // Returns concentration (0.0 to 1.0) of chemical (1 to 255) in the target creature's bloodstream.
-        caosCommand.Stop();
-      }
+            // CHEM (float) chemical (integer)
+            // Returns concentration (0.0 to 1.0) of chemical (1 to 255) in the target creature's bloodstream.
+            caosCommand.Stop();
+          }
+
+        }
 
         private static void Config(){
 

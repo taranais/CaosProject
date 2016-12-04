@@ -18,9 +18,10 @@ namespace c2eUtils.Tests.C2eImages
     public class  C2EImagesTest
     {
 
-        [Fact(Skip="unImplemented")]
+        [Fact]
         public void c16Image()
         {
+            
             if (!Directory.Exists("TestOutput/Decode/c16"))
             {
                 Directory.CreateDirectory("TestOutput/Decode/c16");
@@ -40,11 +41,13 @@ namespace c2eUtils.Tests.C2eImages
                 //   }
                 //}
             }
+            
         }
 
         [Fact]
         public void s16Image()
         {
+            
             if (!Directory.Exists("TestOutput/Decode/s16"))
             {
                 Directory.CreateDirectory("TestOutput/Decode/s16");
@@ -63,11 +66,13 @@ namespace c2eUtils.Tests.C2eImages
                     }
                 }
             }
+            
         }
 
         [Fact]
         public void blkImage()
         {
+            
             if (!Directory.Exists("TestOutput/Decode/blk"))
             {
                 Directory.CreateDirectory("TestOutput/Decode/blk");
@@ -86,6 +91,7 @@ namespace c2eUtils.Tests.C2eImages
                     }
                 }
             }
+            
         }
     }
 }

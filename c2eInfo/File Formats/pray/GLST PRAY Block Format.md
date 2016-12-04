@@ -1,6 +1,7 @@
+# GLST 
 GLST blocks are found in .creature PRAY files and are Zlib-encoded CreaturesArchive data. User text on the conceived/engineered/spliced/cloned events define the Norn's description as in the Creatures 3/Docking Station UI. For the purposes of this article, 'null' is defined as a 4-byte integer with value 0. All strings in GLST blocks are preceded by a 4-byte integer stating their length. The length of a string can be 0. 
 
- Header and Footer 
+# Header and Footer 
 
 GLST blocks are little-endian encoded, and all strings within them are not null-terminated. 
 

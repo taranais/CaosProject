@@ -43,5 +43,6 @@ namespace C2eUtils.ImageFormats
         //   };
         //   encoder.Encode(image, stream);
         }
+        
     }
 }

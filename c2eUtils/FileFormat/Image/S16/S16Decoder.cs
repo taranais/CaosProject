@@ -41,6 +41,7 @@ namespace C2eUtils.ImageFormats
         {
             new s16DecoderCore().Decode(image, stream);
         }
+        
     }
 
     internal class s16DecoderCore
