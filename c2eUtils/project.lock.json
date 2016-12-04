@@ -7156,7 +7156,10 @@
   },
   "projectFileDependencyGroups": {
     "": [
+<<<<<<< HEAD
       "ComponentAce.Compression.Libs.zlib >= 1.0.4",
+=======
+>>>>>>> origin/develop
       "ImageProcessorCore >= 1.0.0-alpha-860",
       "Microsoft.NETCore.App >= 1.0.0-rc2-3002702",
       "NLog >= 4.4.0-*",
